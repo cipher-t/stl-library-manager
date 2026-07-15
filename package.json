@@ -1,0 +1,19 @@
+{
+  "name": "stl-library-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^43.1.1"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  }
+}
