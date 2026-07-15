@@ -6,11 +6,30 @@
     
 </head>
 <body>
-    <h1>STL Library Manager</h1>
+    <div id="toolbar">
+        <button id="scanBtn">Scan Folder</button>
+        <button id="deleteBtn">Delete</button>
+        <button id="renameBtn">Rename</button>
+        <button id="openBtn">Open Folder</button>
+    </div>
 
-    <p>Electron is loading renderer correctly.</p>
+    <div id="main">
+        <div id="sidebar">
+            <div id="fileHeader">
+                STL Files
+            </div>
+        </div>
+        <div id="viewer">
+            STL Preview Area
+        </div>
+    </div>
 
-    <script src="renderer.js"></script>
+    <div id="navigation"></div>
+        <button id="prevBtn">Previous</button>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <script src="renderer.js"></script>   
 
 </body>
 </html>
