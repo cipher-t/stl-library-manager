@@ -52,6 +52,13 @@ body{
 }
 
 #navigation{
+    padding:10px;
+    background:#252526;
+    display:flex;
+    gap:10px;
+}
+
+button{
     background:#3c3c3c;
     color:white;
     border:none;
@@ -60,5 +67,26 @@ body{
 }
 
 button:hover{
-    background:#4c4c4c;
+    background:#444;
+}
+
+.fileItem{
+    padding:6px 8px;
+    cursor:pointer;
+    border-radius:4px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.fileItem:hover{
+    background:#0066cc;
+    color:white;
+}
+
+.selected{
+    background:#0066cc;
+    color:white;
+    border-left:4px solid #00ccff;
+    font-weight:bold;
 }
