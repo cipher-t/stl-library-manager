@@ -1,4 +1,6 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
+//import { OrbitControls }
+//from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
 
 console.log("Viewer loaded");
 
@@ -58,6 +60,14 @@ light.position.set(
 
 scene.add(light);
 
+//const controls =
+//    new OrbitControls(
+//        camera,
+//        renderer.domElement
+//    );
+
+//controls.enableDamping = true;
+
 const cube =
     new THREE.Mesh(
         new THREE.BoxGeometry(),
@@ -97,11 +107,15 @@ function animate(){
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
+//    controls.update();
+
     renderer.render(
         scene,
         camera
     );
 
 }
+
+resize();
 
 animate();
