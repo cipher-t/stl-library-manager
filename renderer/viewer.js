@@ -1,8 +1,8 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
+import * as THREE from 'three';
 
-//import {
-//    OrbitControls
-//} from 'three/examples/jsm/controls/OrbitControls.js';
+import {
+    OrbitControls
+} from 'three/examples/jsm/controls/OrbitControls.js';
 
 //import {
 //    STLLoader
@@ -66,13 +66,13 @@ light.position.set(
 
 scene.add(light);
 
-//const controls =
-//    new OrbitControls(
-//        camera,
-//        renderer.domElement
-//    );
+const controls =
+    new OrbitControls(
+        camera,
+        renderer.domElement
+    );
 
-//controls.enableDamping = true;
+controls.enableDamping = true;
 
 const cube =
     new THREE.Mesh(
@@ -113,7 +113,7 @@ function animate(){
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
-//    controls.update();
+    controls.update();
 
     renderer.render(
         scene,
