@@ -1,3 +1,5 @@
+import * as THREE from '../node_modules/three/build/three.module.js';
+
 console.log("Viewer loaded");
 
 const viewer =
@@ -5,71 +7,99 @@ const viewer =
 
 viewer.innerHTML = "";
 
-const canvas =
-    document.createElement("canvas");
+const scene =
+    new THREE.Scene();
 
-viewer.appendChild(canvas);
+scene.background =
+    new THREE.Color(0x202020);
 
-const ctx =
-    canvas.getContext("2d");
+const camera =
+    new THREE.PerspectiveCamera(
+        60,
+        viewer.clientWidth / viewer.clientHeight,
+        0.1,
+        1000
+    );
+
+camera.position.z = 5;
+
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+renderer.setSize(
+        viewer.clientWidth,
+        viewer.clientHeight
+);
+
+viewer.appendChild(
+    renderer.domElement
+);
+
+scene.add(
+    new THREE.AmbientLight(
+        0xffffff,
+        1
+    )
+);
+
+const light =
+    new THREE.DirectionalLight(
+        0xffffff,
+        2
+    );
+
+light.position.set(
+    2,
+    2,
+    2
+);
+
+scene.add(light);
+
+const cube =
+    new THREE.Mesh(
+        new THREE.BoxGeometry(),
+        new THREE.MeshPhongMaterial({
+            color: 0x00aaff
+        })
+    );
+
+scene.add(cube);
 
 function resize(){
 
-        canvas.width =
-            viewer.clientWidth;
+    camera.aspect =
+        viewer.clientWidth /
+        viewer.clientHeight;
+    
+    camera.updateProjectionMatrix();
 
-        canvas.height =
-            viewer.clientHeight;
+    renderer.setSize(
+        viewer.clientWidth,
+        viewer.clientHeight
+    );
+
 }
-
-resize();
 
 window.addEventListener(
     "resize",
     resize
 );
 
-let angle = 0;
-
 function animate(){
-
-    resize();
-
-    ctx.fillStyle =
-        "#202020";
-
-    ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-    ctx.save();
-
-    ctx.translate(
-        canvas.width / 2,
-        canvas.height / 2
-    );
-
-    ctx.rotate(angle);
-
-    ctx.fillStyle =
-        "#00aaff";
-
-    ctx.fillRect(
-        -50,
-        -50,
-        100,
-        100
-    );
-
-    ctx.restore();
-
-    angle += 0.01;
 
     requestAnimationFrame(
         animate
+    );
+
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    renderer.render(
+        scene,
+        camera
     );
 
 }
