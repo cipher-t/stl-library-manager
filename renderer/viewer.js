@@ -15,6 +15,8 @@ const viewer =
 
 viewer.innerHTML = "";
 
+let currentMesh = null;
+
 const scene =
     new THREE.Scene();
 
@@ -74,15 +76,95 @@ const controls =
 
 controls.enableDamping = true;
 
-const cube =
-    new THREE.Mesh(
-        new THREE.BoxGeometry(),
-        new THREE.MeshPhongMaterial({
-            color: 0x00aaff
-        })
+function fitCamera(mesh){
+    const box =
+        new THREE.Box3()
+            .setFromObject(mesh);
+
+    const size =
+        box.getSize(
+            new THREE.Vector3()
+        );
+
+    const maxDim =
+        Math.max(
+            size.x,
+            size.y,
+            size.z
+        );
+    
+    camera.position.set(
+        0,
+        0,
+        maxDim * 2.5
     );
 
-scene.add(cube);
+    controls.target.set(
+        0,
+        0,
+        0
+    );
+
+    controls.update();
+
+}
+
+function loadSTL(buffer){
+
+    console.log(
+        "Loading STL...",
+        buffer.byteLength
+    );
+
+    if(currentMesh){
+
+        scene.remove(currentMesh);
+
+        currentMesh.geometry.dispose();
+        currentMesh.material.dispose();
+
+    }
+
+    const loader =
+        new STLLoader();
+
+    const geometry =
+        loader.parse(buffer);
+
+    geometry.computeVertexNormals();
+    geometry.center();
+
+    const material =
+        new THREE.MeshPhongMaterial({
+            color: 0xd0d0d0,
+            shininess: 80
+        });
+
+    currentMesh =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    scene.add(currentMesh);
+
+    console.log(
+        "Mesh added"
+    );
+
+    fitCamera(currentMesh);
+
+}
+
+//const cube =
+//    new THREE.Mesh(
+//        new THREE.BoxGeometry(),
+//        new THREE.MeshPhongMaterial({
+//            color: 0x00aaff
+//        })
+//    );
+
+//scene.add(cube);
 
 function resize(){
 
@@ -110,8 +192,8 @@ function animate(){
         animate
     );
 
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+//    cube.rotation.x += 0.01;
+//    cube.rotation.y += 0.01;
 
     controls.update();
 
@@ -125,3 +207,5 @@ function animate(){
 resize();
 
 animate();
+
+window.loadSTLBuffer = loadSTL;

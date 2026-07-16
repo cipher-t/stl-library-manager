@@ -60,3 +60,12 @@ ipcMain.handle(
         return findSTLFiles(folder);
     }
 );
+
+ipcMain.handle(
+    'read-stl-file',
+    async (event, filePath) => {
+
+        return fs.readFileSync(filePath);
+
+    }
+);

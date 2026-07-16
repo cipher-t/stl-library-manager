@@ -13,12 +13,15 @@ const nextBtn =
 let stlFiles = [];
 let currentIndex = -1;
 
-function selectFile(index){
+async function selectFile(index){
+
     if(index < 0 ||
         index >= stlFiles.length){
             return;
     }
+
     currentIndex = index;
+
     document
         .querySelectorAll(".fileItem")
         .forEach(item => {
@@ -27,16 +30,39 @@ function selectFile(index){
 
     const selectedItem =
         fileList.children[index];
+    
     if(selectedItem){
+
         selectedItem.classList.add("selected");
+
         selectedItem.scrollIntoView({
             block: "nearest"
         });
+
     }
+
     console.log(
         "Selected:",
         stlFiles[index]
     );
+
+    const buffer =
+        await window.electronAPI
+            .readSTLFile(
+                stlFiles[index]
+            );
+
+    const arrayBuffer =
+            buffer.buffer.slice(
+                buffer.byteOffset,
+                buffer.byteOffset +
+                buffer.byteLength
+            );
+
+    window.loadSTLBuffer(
+        arrayBuffer
+    );
+
 }
 
 scanBtn.addEventListener("click", async () => {
