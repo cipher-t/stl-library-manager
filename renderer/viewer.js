@@ -15,6 +15,15 @@ const viewer =
 
 viewer.innerHTML = "";
 
+const dimX =
+    document.getElementById("dimX");
+
+const dimY =
+    document.getElementById("dimY");
+
+const dimZ =
+    document.getElementById("dimZ");
+
 let currentMesh = null;
 
 const scene =
@@ -85,6 +94,15 @@ function fitCamera(mesh){
         box.getSize(
             new THREE.Vector3()
         );
+
+    dimX.textContent =
+        `X: ${size.x.toFixed(2)} mm`;
+
+    dimY.textContent =
+        `Y: ${size.y.toFixed(2)} mm`;
+
+    dimZ.textContent =
+        `Z: ${size.z.toFixed(2)} mm`;
 
     const maxDim =
         Math.max(
