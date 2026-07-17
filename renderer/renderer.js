@@ -12,6 +12,7 @@ const nextBtn =
 
 let stlFiles = [];
 let currentIndex = -1;
+let rootFolder = "";
 
 async function selectFile(index){
 
@@ -25,21 +26,28 @@ async function selectFile(index){
     document
         .querySelectorAll(".fileItem")
         .forEach(item => {
-            item.classList.remove("selected");
+
+            item.classList.remove(
+                "selected"
+            );
+
+            if(
+                Number(
+                    item.dataset.index
+                ) === index
+            ){
+
+                item.classList.add(
+                    "selected"
+                );
+
+                item.scrollIntoView({
+                    block: "nearest"
+                });
+            
+            }
+            
         });
-
-    const selectedItem =
-        fileList.children[index];
-    
-    if(selectedItem){
-
-        selectedItem.classList.add("selected");
-
-        selectedItem.scrollIntoView({
-            block: "nearest"
-        });
-
-    }
 
     console.log(
         "Selected:",
@@ -68,32 +76,97 @@ async function selectFile(index){
 scanBtn.addEventListener("click", async () => {
     const folder =
         await window.electronAPI.selectFolder();
+    
     if(!folder){
         return;
     }
+    
+    rootFolder = folder;
+
     console.log(
         "Selected folder:",
         folder
     );
+    
     const files =
         await window.electronAPI.scanLibrary(folder);
-    console.log(
-        "Files found:",
-        files
-    );
+    
+        console.log(
+            "Files found:",
+            files
+        );
+    
     stlFiles = files;
+    
+    const groups = {};
+
     fileList.innerHTML = "";
+    
     files.forEach((file, index) => {
-        const div =
-            document.createElement("div");
-        div.className = "fileItem";
-        div.textContent =
-            file.split("\\").pop();
-        div.addEventListener("click", () => {
-            selectFile(index);
+        
+        const relativePath =
+            file.replace(
+                rootFolder + "\\",
+                ""
+            );
+        
+        const folderName =
+            relativePath.includes("\\")
+                ? relativePath.split("\\")[0]
+                : "Root";
+
+        if(!groups[folderName]){
+            groups[folderName] = [];
+        }
+
+        groups[folderName].push({
+            file,
+            index
         });
-        fileList.appendChild(div);
+        
     });
+
+    for(const folderName in groups){
+        const header =
+            document.createElement("div");
+
+        header.className =
+            "folderHeader";
+
+        header.textContent =
+            "📁 " + folderName;
+
+        fileList.appendChild(header);
+
+        groups[folderName].forEach(item => {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "fileItem";
+
+            div.dataset.index =
+                item.index;
+
+            div.textContent =
+                item.file
+                    .split("\\")
+                    .pop();
+
+            div.addEventListener(
+                "click",
+                () => {
+                    selectFile(item.index);
+                }
+            );
+
+            fileList.appendChild(div);
+
+        });
+
+    }
+
     if(stlFiles.length > 0){
         selectFile(0);
     }
